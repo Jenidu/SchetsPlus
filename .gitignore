@@ -1,2 +1,6 @@
 bin/
 obj/
+*.vsidx
+.vs/
+.vscode/
+Mandelbrot.csproj.user
