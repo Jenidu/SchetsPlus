@@ -4,11 +4,8 @@ using System.Windows.Forms;
 static class Program
 {
     [STAThreadAttribute]
-    static void Main() //hiermee begint het programma
+    static void Main()
     {
-        Application.Run(new SchetsEditor()); 
+        Application.Run(new SchetsEditor());
     }
 }
-
-
-

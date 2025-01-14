@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Windows.Forms;
 
-public class Schets //modelleert de schets
+public class Schets
 {
     private Bitmap bitmap;
         
@@ -40,9 +42,19 @@ public class Schets //modelleert de schets
     {
         bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
     }
-    
+
     public void Exporteren()
     {
-        bitmap.Save(@"file.png", ImageFormat.Png);
+        SaveFileDialog sfd = new SaveFileDialog();
+        sfd.Filter = "Images|*.png";
+        ImageFormat format = ImageFormat.Png;
+        sfd.Title = "Plaatje opslaan als...";
+        if (sfd.ShowDialog() == DialogResult.OK)
+        {
+            bitmap.Save(sfd.FileName, format);
+        }
+
     }
+
+
 }
