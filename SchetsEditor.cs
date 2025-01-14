@@ -49,4 +49,5 @@ public class SchetsEditor : Form //modelleert het MDI-containerwindow (afhandele
     {   
         this.Close();
     }
+ 
 }

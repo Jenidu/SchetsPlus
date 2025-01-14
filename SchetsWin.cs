@@ -77,6 +77,7 @@ public class SchetsWin : Form //modelleert child-window (tekening tonen, buttons
         menuStrip.Visible = false;
         this.Controls.Add(menuStrip);
         this.maakFileMenu();
+        this.maakExporterenMenu();
         this.maakToolMenu(deTools);
         this.maakActieMenu(deKleuren);
         this.maakToolButtons(deTools);
@@ -87,7 +88,7 @@ public class SchetsWin : Form //modelleert child-window (tekening tonen, buttons
 
     private void maakFileMenu()
     {
-        ToolStripMenuItem menu = new ToolStripMenuItem("File");
+        ToolStripMenuItem menu = new ToolStripMenuItem("test");
         menu.MergeAction = MergeAction.MatchOnly;
         menu.DropDownItems.Add("Sluiten", null, this.afsluiten);
         menuStrip.Items.Add(menu);
@@ -117,6 +118,18 @@ public class SchetsWin : Form //modelleert child-window (tekening tonen, buttons
         foreach (string k in kleuren)
             submenu.DropDownItems.Add(k, null, schetscontrol.VeranderKleurViaMenu);
         menu.DropDownItems.Add(submenu);
+        menuStrip.Items.Add(menu);
+    }
+
+    private void maakExporterenMenu()
+    {
+        //ToolStripMenuItem menu = new ToolStripMenuItem("Exporteren");
+        //menu.DropDownItems.Add("PNG", null);
+        //menu.DropDownItems.Add("JPG", null);
+        //menu.DropDownItems.Add("BMP", null);
+        //menuStrip.Items.Add(menu);
+        ToolStripMenuItem menu = new ToolStripMenuItem("Exporteren");
+        menu.DropDownItems.Add("PNG", null, schetscontrol.Exporteren);
         menuStrip.Items.Add(menu);
     }
 

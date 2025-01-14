@@ -40,4 +40,9 @@ public class Schets //modelleert de schets
     {
         bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
     }
+    
+    public void Exporteren()
+    {
+        bitmap.Save(@"file.png", ImageFormat.Png);
+    }
 }
