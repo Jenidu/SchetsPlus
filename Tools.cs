@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-
+//voor elke tool is er ene aparte klasse. 
 public interface ISchetsTool
 {
     void MuisVast(SchetsControl s, Point p);
@@ -56,6 +56,8 @@ public abstract class TweepuntTool : StartpuntTool
                             , new Size (Math.Abs(p1.X-p2.X), Math.Abs(p1.Y-p2.Y))
                             );
     }
+
+    
     public static Pen MaakPen(Brush b, int dikte)
     {   Pen pen = new Pen(b, dikte);
         pen.StartCap = LineCap.Round;
@@ -128,5 +130,26 @@ public class GumTool : PenTool
 
     public override void Bezig(Graphics g, Point p1, Point p2)
     {   g.DrawLine(MaakPen(Brushes.White, 7), p1, p2);
+    }
+}
+
+public class CirkelTool : TweepuntTool
+{
+    public override string ToString() { return "Open"; }
+
+    public override void Bezig(Graphics g, Point p1, Point p2)
+    {
+        g.DrawEllipse(MaakPen(kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
+        
+    }
+}
+
+public class VolCirkelTool : CirkelTool
+{
+    public override string ToString() { return "Cirkel"; }
+
+    public override void Compleet(Graphics g, Point p1, Point p2)
+    {
+        g.FillEllipse(kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
     }
 }

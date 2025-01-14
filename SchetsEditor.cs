@@ -2,13 +2,13 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-public class SchetsEditor : Form
+public class SchetsEditor : Form //modelleert het MDI-containerwindow (afhandelen file-menu keuze)
 {
     private MenuStrip menuStrip;
 
     public SchetsEditor()
     {   
-        this.ClientSize = new Size(800, 600);
+        this.ClientSize = new Size(800, 650);
         menuStrip = new MenuStrip();
         this.Controls.Add(menuStrip);
         this.maakFileMenu();

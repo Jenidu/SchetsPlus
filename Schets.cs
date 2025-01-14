@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-public class Schets
+public class Schets //modelleert de schets
 {
     private Bitmap bitmap;
         

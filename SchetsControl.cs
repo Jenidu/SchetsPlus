@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-public class SchetsControl : UserControl
+public class SchetsControl : UserControl //modelleert control waarmee gebruiker een 'schets' kan bewerken
 {   
     private Schets schets;
     private Color penkleur;
