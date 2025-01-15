@@ -43,18 +43,20 @@ public class Schets
         bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
     }
 
-    public void Exporteren()
+    public void Exporteren(ImageFormat format)
     {
         SaveFileDialog sfd = new SaveFileDialog();
-        sfd.Filter = "Images|*.png";
-        ImageFormat format = ImageFormat.Png;
         sfd.Title = "Plaatje opslaan als...";
+        bitmap.Save($@"file.{format}", format);
+        ImageFormat format = format;  
         if (sfd.ShowDialog() == DialogResult.OK)
         {
             bitmap.Save(sfd.FileName, format);
         }
 
+
     }
+   
 
 
 }

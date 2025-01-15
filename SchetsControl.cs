@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 public class SchetsControl : UserControl
@@ -53,10 +54,13 @@ public class SchetsControl : UserControl
         schets.Roteer();
         this.Invalidate();
     }
-    public void Exporteren(object o, EventArgs ea)
+    public void Exporteren(object o, EventArgs ea, ImageFormat format)
     {
-        schets.Exporteren();
+        schets.Exporteren(ImageFormat format);
     }
+
+
+
     public void VeranderKleur(object obj, EventArgs ea)
     {
         string kleurNaam = ((ComboBox)obj).Text;

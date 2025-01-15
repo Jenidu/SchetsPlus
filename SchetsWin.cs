@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 public class SchetsWin : Form
@@ -122,9 +123,11 @@ public class SchetsWin : Form
 
     private void maakExporterenMenu()
     {
-        
+
         ToolStripMenuItem menu = new ToolStripMenuItem("Exporteren");
-        menu.DropDownItems.Add("PNG", null, schetscontrol.Exporteren);
+        menu.DropDownItems.Add("PNG", null, schetscontrol.Exporteren(ImageFormat.Png));
+        menu.DropDownItems.Add("JPG", null, schetscontrol.Exporteren(ImageFormat.Jpeg));
+        menu.DropDownItems.Add("BMP", null, schetscontrol.Exporteren(ImageFormat.Bmp));
         menuStrip.Items.Add(menu);
     }
 
