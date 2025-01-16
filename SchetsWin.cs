@@ -1,3 +1,4 @@
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -33,7 +34,20 @@ public class SchetsWin : Form
 
     private void afsluiten(object obj, EventArgs ea)
     {
-        this.Close();
+        string message = "Do you want to close this window?";
+        string title = "close window";
+        MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+        DialogResult result = MessageBox.Show(message, title, buttons);
+        if (result == DialogResult.Yes)
+        {
+            this.Close();
+        }
+        else
+        {
+            //doe niets
+        }
+
+
     }
 
     public SchetsWin()
@@ -123,11 +137,10 @@ public class SchetsWin : Form
 
     private void maakExporterenMenu()
     {
-
-        ToolStripMenuItem menu = new ToolStripMenuItem("Exporteren");
-        menu.DropDownItems.Add("PNG", null, schetscontrol.Exporteren(ImageFormat.Png));
-        menu.DropDownItems.Add("JPG", null, schetscontrol.Exporteren(ImageFormat.Jpeg));
-        menu.DropDownItems.Add("BMP", null, schetscontrol.Exporteren(ImageFormat.Bmp));
+        ToolStripMenuItem menu = new ToolStripMenuItem("Exporteren");        
+        menu.DropDownItems.Add("PNG", null, schetscontrol.Exporteren_Png);        
+        menu.DropDownItems.Add("JPG", null, schetscontrol.Exporteren_Jpeg);        
+        menu.DropDownItems.Add("BMP", null, schetscontrol.Exporteren_Bmp);
         menuStrip.Items.Add(menu);
     }
 

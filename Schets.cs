@@ -42,21 +42,15 @@ public class Schets
     {
         bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
     }
-
-    public void Exporteren(ImageFormat format)
+    public void ExporterenmetFormaat(ImageFormat format)
     {
         SaveFileDialog sfd = new SaveFileDialog();
         sfd.Title = "Plaatje opslaan als...";
-        bitmap.Save($@"file.{format}", format);
-        ImageFormat format = format;  
+        bitmap.Save($@"file.{format}", format);          
         if (sfd.ShowDialog() == DialogResult.OK)
         {
             bitmap.Save(sfd.FileName, format);
         }
-
-
-    }
-   
-
+    } 
 
 }

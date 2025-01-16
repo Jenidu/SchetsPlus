@@ -54,11 +54,18 @@ public class SchetsControl : UserControl
         schets.Roteer();
         this.Invalidate();
     }
-    public void Exporteren(object o, EventArgs ea, ImageFormat format)
+    public void Exporteren_Png(object o, EventArgs ea)//kan dit efficiënter?
     {
-        schets.Exporteren(ImageFormat format);
+        schets.ExporterenmetFormaat(ImageFormat.Png);
     }
-
+    public void Exporteren_Jpeg(object o, EventArgs ea)
+    {
+        schets.ExporterenmetFormaat(ImageFormat.Jpeg);
+    }
+    public void Exporteren_Bmp(object o, EventArgs ea)
+    {
+        schets.ExporterenmetFormaat(ImageFormat.Bmp);
+    }
 
 
     public void VeranderKleur(object obj, EventArgs ea)
@@ -71,4 +78,9 @@ public class SchetsControl : UserControl
         string kleurNaam = ((ToolStripMenuItem)obj).Text;
         penkleur = Color.FromName(kleurNaam);
     }
+    
+    
+   
+
+
 }
