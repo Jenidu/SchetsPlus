@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
@@ -7,6 +8,7 @@ using System.Windows.Forms;
 public class Schets
 {
     private Bitmap bitmap;
+    public static List<grHist> BMveranderingen = new List<grHist>();
     public isHetOpgeslagen isHetOpgeslagen = new isHetOpgeslagen();
 
     public Schets()
@@ -53,6 +55,14 @@ public class Schets
             bitmap.Save(sfd.FileName, format);
             isHetOpgeslagen.opgeslagen = true;
         }
-    } 
+    }
+}
 
+public struct grHist
+{
+    public Point p1 { get; set; }
+    public Point p2 { get; set; }
+    public Brush brush { get; set; }
+    public string tekst { get; set; }
+    public string Actie { get; set; }
 }

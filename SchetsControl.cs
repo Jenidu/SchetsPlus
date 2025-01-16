@@ -79,9 +79,4 @@ public class SchetsControl : UserControl
         string kleurNaam = ((ToolStripMenuItem)obj).Text;
         penkleur = Color.FromName(kleurNaam);
     }
-    
-    
-   
-
-
 }
