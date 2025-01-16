@@ -7,7 +7,8 @@ using System.Windows.Forms;
 public class Schets
 {
     private Bitmap bitmap;
-        
+    public isHetOpgeslagen isHetOpgeslagen = new isHetOpgeslagen();
+
     public Schets()
     {
         bitmap = new Bitmap(1, 1);
@@ -50,6 +51,7 @@ public class Schets
         if (sfd.ShowDialog() == DialogResult.OK)
         {
             bitmap.Save(sfd.FileName, format);
+            isHetOpgeslagen.opgeslagen = true;
         }
     } 
 

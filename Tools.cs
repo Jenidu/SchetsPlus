@@ -10,6 +10,23 @@ public interface ISchetsTool
     void Letter(SchetsControl s, char c);
 }
 
+public class isHetOpgeslagen
+{
+    public bool opgeslagen;
+    public void isOpgeslagen(bool x)
+    {
+        opgeslagen = x;
+
+    }
+    public bool CheckOpgeslagen
+    {
+        get
+        {
+            return opgeslagen;
+        }
+    }
+}
+
 public abstract class StartpuntTool : ISchetsTool
 {
     protected Point startpunt;

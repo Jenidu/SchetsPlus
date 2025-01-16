@@ -5,6 +5,9 @@ using System.Windows.Forms;
 public class SchetsEditor : Form
 {
     private MenuStrip menuStrip;
+    
+
+    
 
     public SchetsEditor()
     {   
@@ -16,7 +19,7 @@ public class SchetsEditor : Form
         this.Text = "Schets editor";
         this.IsMdiContainer = true;
         this.MainMenuStrip = menuStrip;
-    }
+}
     private void maakFileMenu()
     {   
         ToolStripDropDownItem menu = new ToolStripMenuItem("File");

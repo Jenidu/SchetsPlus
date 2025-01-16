@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 public class SchetsControl : UserControl
 {
-    private Schets schets;
+    public Schets schets;
     private Color penkleur;
 
     public Color PenKleur
@@ -31,6 +31,7 @@ public class SchetsControl : UserControl
     private void teken(object o, PaintEventArgs pea)
     {
         schets.Teken(pea.Graphics);
+        schets.isHetOpgeslagen.isOpgeslagen(false);
     }
     private void veranderAfmeting(object o, EventArgs ea)
     {
@@ -42,6 +43,7 @@ public class SchetsControl : UserControl
         Graphics g = schets.BitmapGraphics;
         g.SmoothingMode = SmoothingMode.AntiAlias;
         return g;
+        
     }
     public void Schoon(object o, EventArgs ea)
     {
@@ -54,7 +56,7 @@ public class SchetsControl : UserControl
         schets.Roteer();
         this.Invalidate();
     }
-    public void Exporteren_Png(object o, EventArgs ea)//kan dit efficiënter?
+    public void Exporteren_Png(object o, EventArgs ea)//kan dit efficiënter? misschien met switch?
     {
         schets.ExporterenmetFormaat(ImageFormat.Png);
     }
@@ -66,8 +68,6 @@ public class SchetsControl : UserControl
     {
         schets.ExporterenmetFormaat(ImageFormat.Bmp);
     }
-
-
     public void VeranderKleur(object obj, EventArgs ea)
     {
         string kleurNaam = ((ComboBox)obj).Text;

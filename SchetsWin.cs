@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 
-public class SchetsWin : Form
+public class SchetsWin : Form //in form zit dat kruisje
 {   
     MenuStrip menuStrip;
     SchetsControl schetscontrol;
@@ -34,18 +34,22 @@ public class SchetsWin : Form
 
     private void afsluiten(object obj, EventArgs ea)
     {
-        string message = "Do you want to close this window?";
-        string title = "close window";
-        MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-        DialogResult result = MessageBox.Show(message, title, buttons);
-        if (result == DialogResult.Yes)
+        if (schetscontrol.schets.isHetOpgeslagen.CheckOpgeslagen == false)
         {
-            this.Close();
+            string message = "Do you want to close this window?";
+            string title = "close window";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result = MessageBox.Show(message, title, buttons);
+            if (result == DialogResult.Yes)
+            {
+                this.Close();
+            }            
         }
         else
         {
-            //doe niets
+            this.Close();
         }
+        
 
 
     }
