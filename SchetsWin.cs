@@ -12,8 +12,6 @@ public class SchetsWin : Form //in form zit dat kruisje
     ISchetsTool huidigeTool;
     Panel paneel;
     bool vast;
-    
-
 
     private void veranderAfmeting(object o, EventArgs ea)
     {
@@ -43,20 +41,15 @@ public class SchetsWin : Form //in form zit dat kruisje
             if (result == DialogResult.Yes)
             {
                 this.Close();
-            }            
+            }
         }
-        else
-        {
+        else {
             this.Close();
         }
-        
-
-
     }
 
     public SchetsWin()
     {
-        
         ISchetsTool[] deTools = { new PenTool()         
                                 , new LijnTool()
                                 , new RechthoekTool()

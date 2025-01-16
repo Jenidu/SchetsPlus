@@ -48,6 +48,7 @@ public class SchetsControl : UserControl
     public void Schoon(object o, EventArgs ea)
     {
         schets.Schoon();
+        // Schets.BMveranderingen.Clear();
         this.Invalidate();
     }
     public void Roteer(object o, EventArgs ea)
@@ -56,7 +57,7 @@ public class SchetsControl : UserControl
         schets.Roteer();
         this.Invalidate();
     }
-    public void Exporteren_Png(object o, EventArgs ea)//kan dit efficiënter? misschien met switch?
+    public void Exporteren_Png(object o, EventArgs ea)//kan dit efficiï¿½nter? misschien met switch?
     {
         schets.ExporterenmetFormaat(ImageFormat.Png);
     }

@@ -5,9 +5,6 @@ using System.Windows.Forms;
 public class SchetsEditor : Form
 {
     private MenuStrip menuStrip;
-    
-
-    
 
     public SchetsEditor()
     {   
