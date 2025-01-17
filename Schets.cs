@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 public class Schets
 {
-    private Bitmap bitmap;
+    public Bitmap bitmap;
     public static List<grHist> BMveranderingen = new List<grHist>();
     public isHetOpgeslagen isHetOpgeslagen = new isHetOpgeslagen();
 
@@ -40,6 +40,7 @@ public class Schets
     {
         Graphics gr = Graphics.FromImage(bitmap);
         gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
+        Schets.BMveranderingen.Clear();
     }
     public void Roteer()
     {
