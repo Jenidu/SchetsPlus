@@ -61,17 +61,18 @@ public abstract class StartpuntTool : ISchetsTool
         return p;
     }
 
-    public void TekenString(Graphics g, string tekst, bool add_hist)
+    public void TekenString(Graphics g, Point p, string tekst, bool add_hist)
     {
         Font font = new Font("Tahoma", 40);
 
         SizeF sz = 
-        g.MeasureString(tekst, font, this.startpunt, StringFormat.GenericTypographic);
-        g.DrawString   (tekst, font, kwast, this.startpunt, StringFormat.GenericTypographic);
-        // gr.DrawRectangle(Pens.Black, startpunt.X, startpunt.Y, sz.Width, sz.Height);
-
+        g.MeasureString(tekst, font, p, StringFormat.GenericTypographic);
+        g.DrawString   (tekst, font, kwast, p, StringFormat.GenericTypographic);
+        g.DrawRectangle(Pens.GreenYellow, p.X, p.Y, sz.Width, sz.Height);
+Console.WriteLine(sz);
+Console.WriteLine((int)sz.Height);
         grHist gr_hist = new grHist {
-            p1 = this.startpunt, p2 = new Point(this.startpunt.X + (int)sz.Width, this.startpunt.Y + (int)sz.Height),
+            p1 = new Point(p.X, p.Y), p2 = new Point(p.X + (int)sz.Width, p.Y + (int)sz.Height),
             brush = kwast, tekst = tekst, Actie = "DrawString"
         };
 
@@ -160,7 +161,7 @@ public class TekstTool : StartpuntTool
             Graphics gr = s.MaakBitmapGraphics();
             string tekst = c.ToString();
 
-            TekenString(gr, tekst, true);
+            TekenString(gr, startpunt, tekst, true);
             s.Invalidate();
         }
     }
@@ -246,8 +247,8 @@ public class GumTool : PenTool
 
         if (pos != -1)
         {   Console.WriteLine($"Gevonden {pos}");
-            g.FillRectangle(Brushes.White, Schets.BMveranderingen[pos].p1.X, Schets.BMveranderingen[pos].p1.Y,
-                                           Schets.BMveranderingen[pos].p2.X+1, Schets.BMveranderingen[pos].p2.Y+1);  /* Clear bitmap */
+            g.FillRectangle(Brushes.White, Schets.BMveranderingen[pos].p1.X - 1, Schets.BMveranderingen[pos].p1.Y - 1,
+                                           Schets.BMveranderingen[pos].p2.X, Schets.BMveranderingen[pos].p2.Y);  /* Clear bitmap */
             Schets.BMveranderingen.Remove(Schets.BMveranderingen[pos]);  /* Verwijder item uit geschiedenis */
             bouwBitmap(g);  /* Herbouw de bitmap */
         }
@@ -257,8 +258,9 @@ public class GumTool : PenTool
     {   Console.WriteLine($"Count: {Schets.BMveranderingen.Count}");
         for (int i = Schets.BMveranderingen.Count - 1; i >= 0 ; i--)  /* Vind laatste Bitmap element dat overlapt met Point p */
         {
+Console.WriteLine($"{Schets.BMveranderingen[i].p1.X} <= {p.X} {Schets.BMveranderingen[i].p1.Y} <= {p.Y} {Schets.BMveranderingen[i].p2.X} >= {p.X} {Schets.BMveranderingen[i].p2.Y} >= {p.Y}");
             if (Schets.BMveranderingen[i].p1.X <= p.X && Schets.BMveranderingen[i].p1.Y <= p.Y &&
-            Schets.BMveranderingen[i].p2.X <= p.X && Schets.BMveranderingen[i].p2.Y <= p.Y)
+            Schets.BMveranderingen[i].p2.X >= p.X && Schets.BMveranderingen[i].p2.Y >= p.Y)
                 return i;
         }
         return -1;  /* De gegeven positie zit niet in de geschiedenis */
@@ -271,7 +273,7 @@ public class GumTool : PenTool
             switch (Schets.BMveranderingen[i].Actie)
             {
                 case "DrawString":
-                    TekenString(g, Schets.BMveranderingen[i].tekst, false);
+                    TekenString(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].tekst, false);
                     break;
                 case "DrawRectangle":
                     TekenRechtHoek(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].p2, false);
