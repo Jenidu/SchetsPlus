@@ -41,110 +41,6 @@ public abstract class StartpuntTool : ISchetsTool
     }
     public abstract void MuisDrag(SchetsControl s, Point p);
     public abstract void Letter(SchetsControl s, char c);
-
-    public static Pen MaakPen(Brush b, int dikte)
-    {   Pen pen = new Pen(b, dikte);
-        pen.StartCap = LineCap.Round;
-        pen.EndCap = LineCap.Round;
-        return pen;
-    }
-
-    private Point[] OrderPoints(Point p1, Point p2)  /* Zorg ervoor dat p1 >= p2 */
-    {
-        Point[] p = new Point[2];
-
-        p[0].X = p1.X < p2.X ? p1.X : p2.X;
-        p[0].Y = p1.Y < p2.Y ? p1.Y : p2.Y;
-        p[1].X = p1.X > p2.X ? p1.X : p2.X;
-        p[1].Y = p1.Y > p2.Y ? p1.Y : p2.Y;
-
-        return p;
-    }
-
-    public void TekenString(Graphics g, Point p, Brush Kwast, string tekst, bool add_hist)
-    {
-        Font font = new Font("Tahoma", 40);
-
-        SizeF sz = 
-        g.MeasureString(tekst, font, p, StringFormat.GenericTypographic);
-        g.DrawString   (tekst, font, Kwast, p, StringFormat.GenericTypographic);
-        // g.DrawRectangle(Pens.GreenYellow, p.X, p.Y, sz.Width, sz.Height);
-
-        grHist gr_hist = new grHist {
-            p1 = new Point(p.X, p.Y), p2 = new Point(p.X + (int)sz.Width, p.Y + (int)sz.Height),
-            brush = Kwast, tekst = tekst, Actie = "DrawString"
-        };
-
-        startpunt.X += (int)sz.Width;
-
-        if (add_hist)
-            Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
-    }
-
-    public void TekenRechtHoek(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
-    {
-        Point[] p = OrderPoints(p1, p2);
-        grHist gr_hist = new grHist {
-            p1 = p[0], p2 = p[1], brush = Kwast, Actie = "DrawRectangle"
-        };
-
-        if (add_hist)
-            Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
-
-        g.DrawRectangle(MaakPen(Kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
-    }
-
-    public void VulRechthoek(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
-    {
-        Point[] p = OrderPoints(p1, p2);
-        grHist gr_hist = new grHist {
-            p1 = p[0], p2 = p[1], brush = Kwast, Actie = "FillRectangle"
-        };Console.WriteLine(p1);Console.WriteLine(p2);
-
-        if (add_hist)
-            Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
-
-        g.FillRectangle(Kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
-    }
-
-    public void TekenLijn(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
-    {
-        // Point[] p = OrderPoints(p1, p2);
-        grHist gr_hist = new grHist {
-            p1 = p1, p2 = p2, brush = Kwast, Actie = "DrawLine"
-        };
-
-        if (add_hist)
-            Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
-
-        g.DrawLine(MaakPen(Kwast,3), p1, p2);
-    }
-
-    public void TekenEllips(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
-    {
-        Point[] p = OrderPoints(p1, p2);
-        grHist gr_hist = new grHist {
-            p1 = p[0], p2 = p[1], brush = Kwast, Actie = "DrawEllipse"
-        };
-
-        if (add_hist)
-            Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
-
-        g.DrawEllipse(MaakPen(Kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
-    }
-
-    public void VulEllips(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
-    {
-        Point[] p = OrderPoints(p1, p2);
-        grHist gr_hist = new grHist {
-            p1 = p[0], p2 = p[1], brush = Kwast, Actie = "FillEllipse"
-        };
-
-        if (add_hist)
-            Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
-
-        g.FillEllipse(Kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
-    }
 }
 
 public class TekstTool : StartpuntTool
@@ -160,7 +56,8 @@ public class TekstTool : StartpuntTool
             Graphics gr = s.MaakBitmapGraphics();
             string tekst = c.ToString();
 
-            TekenString(gr, startpunt, kwast, tekst, true);
+            Teken.TekenString(gr, startpunt, kwast, tekst, true);
+            startpunt.X = Schets.BMveranderingen[Schets.BMveranderingen.Count-1].p2.X;
             s.Invalidate();
         }
     }
@@ -202,11 +99,11 @@ public class RechthoekTool : TweepuntTool
     public override string ToString() { return "kader"; }
 
     public override void Bezig(Graphics g, Point p1, Point p2){
-        TekenRechtHoek(g, p1, p2, kwast, false);
+        Teken.TekenRechtHoek(g, p1, p2, kwast, false);
     }
 
     public override void Compleet(Graphics g, Point p1, Point p2){
-        TekenRechtHoek(g, p1, p2, kwast, true);
+        Teken.TekenRechtHoek(g, p1, p2, kwast, true);
     }
 }
     
@@ -215,7 +112,7 @@ public class VolRechthoekTool : RechthoekTool
     public override string ToString() { return "vlak"; }
 
     public override void Compleet(Graphics g, Point p1, Point p2){
-        VulRechthoek(g, p1, p2, kwast, true);
+        Teken.VulRechthoek(g, p1, p2, kwast, true);
     }
 }
 
@@ -224,11 +121,11 @@ public class LijnTool : TweepuntTool
     public override string ToString() { return "lijn"; }
 
     public override void Bezig(Graphics g, Point p1, Point p2){
-        TekenLijn(g, p1, p2, kwast, false);
+        Teken.TekenLijn(g, p1, p2, kwast, false);
     }
 
     public override void Compleet(Graphics g, Point p1, Point p2){
-        TekenLijn(g, p1, p2, kwast, true);
+        Teken.TekenLijn(g, p1, p2, kwast, true);
     }
 }
 
@@ -249,18 +146,18 @@ public class GumTool : TweepuntTool
     public override void Bezig(Graphics g, Point p1, Point p2)
     {
         Console.WriteLine(startpunt);
-        int pos = vindGeschiedenis(startpunt);  /* Vind de plek in geschiedenis dat weggehaald moet worden */
+        int pos = VindGeschiedenis(startpunt);  /* Vind de plek in geschiedenis dat weggehaald moet worden */
 
         if (pos != -1)
         {   Console.WriteLine($"Gevonden {pos}");
             g.FillRectangle(Brushes.White, Schets.BMveranderingen[pos].p1.X - 2, Schets.BMveranderingen[pos].p1.Y - 2,
                                            Schets.BMveranderingen[pos].p2.X, Schets.BMveranderingen[pos].p2.Y);  /* Clear bitmap */
             Schets.BMveranderingen.Remove(Schets.BMveranderingen[pos]);  /* Verwijder item uit geschiedenis */
-            bouwBitmap(g);  /* Herbouw de bitmap */
+            ElemBewerken.bouwBitmap(g);  /* Herbouw de bitmap */
         }
     }
 
-    private int vindGeschiedenis(Point p)
+    private int VindGeschiedenis(Point p)
     {   Console.WriteLine($"Count: {Schets.BMveranderingen.Count}");
         for (int i = Schets.BMveranderingen.Count - 1; i >= 0 ; i--)  /* Vind laatste Bitmap element dat overlapt met Point p */
         {
@@ -288,37 +185,6 @@ public class GumTool : TweepuntTool
         }
         return -1;  /* De gegeven positie zit niet in de geschiedenis */
     }
-
-    private void bouwBitmap(Graphics g)
-    {   Console.WriteLine($"New count: {Schets.BMveranderingen.Count}");
-        for (int i = 0; i < Schets.BMveranderingen.Count; i++)
-        {
-            switch (Schets.BMveranderingen[i].Actie)
-            {
-                case "DrawString":
-                    TekenString(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].brush, Schets.BMveranderingen[i].tekst, false);
-                    break;
-                case "DrawRectangle":
-                    TekenRechtHoek(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].p2, Schets.BMveranderingen[i].brush, false);
-                    break;
-                case "FillRectangle":
-                    VulRechthoek(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].p2, Schets.BMveranderingen[i].brush, false);
-                    break;
-                case "DrawLine":
-                    TekenLijn(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].p2, Schets.BMveranderingen[i].brush, false);
-                    break;
-                case "DrawEllipse":
-                    TekenEllips(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].p2, Schets.BMveranderingen[i].brush, false);
-                    break;
-                case "FillEllipse":
-                    VulEllips(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].p2, Schets.BMveranderingen[i].brush, false);
-                    break;
-                default:
-                    Console.WriteLine($"Incorrect history of '{Schets.BMveranderingen[i].Actie}'");
-                    break;
-            }
-        }
-    }
 }
 
 public class CirkelTool : TweepuntTool
@@ -326,11 +192,11 @@ public class CirkelTool : TweepuntTool
     public override string ToString() { return "Open"; }
 
     public override void Bezig(Graphics g, Point p1, Point p2){
-        TekenEllips(g, p1, p2, kwast, false);
+        Teken.TekenEllips(g, p1, p2, kwast, false);
     }
 
     public override void Compleet(Graphics g, Point p1, Point p2){
-        TekenEllips(g, p1, p2, kwast, true);
+        Teken.TekenEllips(g, p1, p2, kwast, true);
     }
 }
 
@@ -339,7 +205,147 @@ public class VolCirkelTool : CirkelTool
     public override string ToString() { return "Cirkel"; }
 
     public override void Compleet(Graphics g, Point p1, Point p2){
-        VulEllips(g, p1, p2, kwast, true);
+        Teken.VulEllips(g, p1, p2, kwast, true);
+    }
+}
+
+
+public static class Teken
+{
+    private static Pen MaakPen(Brush b, int dikte)
+    {   Pen pen = new Pen(b, dikte);
+        pen.StartCap = LineCap.Round;
+        pen.EndCap = LineCap.Round;
+        return pen;
+    }
+
+    private static Point[] OrderPoints(Point p1, Point p2)  /* Zorg ervoor dat p1 >= p2 */
+    {
+        Point[] p = new Point[2];
+
+        p[0].X = p1.X < p2.X ? p1.X : p2.X;
+        p[0].Y = p1.Y < p2.Y ? p1.Y : p2.Y;
+        p[1].X = p1.X > p2.X ? p1.X : p2.X;
+        p[1].Y = p1.Y > p2.Y ? p1.Y : p2.Y;
+
+        return p;
+    }
+
+    public static void TekenString(Graphics g, Point p, Brush Kwast, string tekst, bool add_hist)
+    {
+        Font font = new Font("Tahoma", 40);
+
+        SizeF sz = 
+        g.MeasureString(tekst, font, p, StringFormat.GenericTypographic);
+        g.DrawString   (tekst, font, Kwast, p, StringFormat.GenericTypographic);
+        // g.DrawRectangle(Pens.GreenYellow, p.X, p.Y, sz.Width, sz.Height);
+
+        grHist gr_hist = new grHist {
+            p1 = new Point(p.X, p.Y), p2 = new Point(p.X + (int)sz.Width, p.Y + (int)sz.Height),
+            brush = Kwast, tekst = tekst, Actie = "DrawString"
+        };
+
+        if (add_hist)
+            Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
+    }
+
+    public static void TekenRechtHoek(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
+    {
+        Point[] p = OrderPoints(p1, p2);
+        grHist gr_hist = new grHist {
+            p1 = p[0], p2 = p[1], brush = Kwast, Actie = "DrawRectangle"
+        };
+
+        if (add_hist)
+            Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
+
+        g.DrawRectangle(MaakPen(Kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
+    }
+
+    public static void VulRechthoek(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
+    {
+        Point[] p = OrderPoints(p1, p2);
+        grHist gr_hist = new grHist {
+            p1 = p[0], p2 = p[1], brush = Kwast, Actie = "FillRectangle"
+        };Console.WriteLine(p1);Console.WriteLine(p2);
+
+        if (add_hist)
+            Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
+
+        g.FillRectangle(Kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
+    }
+
+    public static void TekenLijn(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
+    {
+        // Point[] p = OrderPoints(p1, p2);
+        grHist gr_hist = new grHist {
+            p1 = p1, p2 = p2, brush = Kwast, Actie = "DrawLine"
+        };
+
+        if (add_hist)
+            Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
+
+        g.DrawLine(MaakPen(Kwast,3), p1, p2);
+    }
+
+    public static void TekenEllips(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
+    {
+        Point[] p = OrderPoints(p1, p2);
+        grHist gr_hist = new grHist {
+            p1 = p[0], p2 = p[1], brush = Kwast, Actie = "DrawEllipse"
+        };
+
+        if (add_hist)
+            Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
+
+        g.DrawEllipse(MaakPen(Kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
+    }
+
+    public static void VulEllips(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
+    {
+        Point[] p = OrderPoints(p1, p2);
+        grHist gr_hist = new grHist {
+            p1 = p[0], p2 = p[1], brush = Kwast, Actie = "FillEllipse"
+        };
+
+        if (add_hist)
+            Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
+
+        g.FillEllipse(Kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
+    }
+}
+
+public static class ElemBewerken
+{
+    public static void bouwBitmap(Graphics g)
+    {   Console.WriteLine($"New count: {Schets.BMveranderingen.Count}");
+        for (int i = 0; i < Schets.BMveranderingen.Count; i++)
+        {
+            switch (Schets.BMveranderingen[i].Actie)
+            {
+                case "DrawString":
+                    Teken.TekenString(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].brush, Schets.BMveranderingen[i].tekst, false);
+                    break;
+                case "DrawRectangle":
+                    Teken.TekenRechtHoek(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].p2, Schets.BMveranderingen[i].brush, false);
+                    break;
+                case "FillRectangle":
+                    Teken.VulRechthoek(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].p2, Schets.BMveranderingen[i].brush, false);
+                    break;
+                case "DrawLine":
+                    Teken.TekenLijn(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].p2, Schets.BMveranderingen[i].brush, false);
+                    break;
+                case "DrawEllipse":
+                    Teken.TekenEllips(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].p2, Schets.BMveranderingen[i].brush, false);
+                    break;
+                case "FillEllipse":
+                    Teken.VulEllips(g, Schets.BMveranderingen[i].p1, Schets.BMveranderingen[i].p2, Schets.BMveranderingen[i].brush, false);
+                    break;
+                default:
+                    Console.WriteLine($"Incorrect history of '{Schets.BMveranderingen[i].Actie}'");
+                    break;
+            }
+        }
     }
 }
 
