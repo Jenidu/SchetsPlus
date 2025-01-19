@@ -9,6 +9,7 @@ public class Schets
 {
     public Bitmap bitmap;
     public static List<grHist> BMveranderingen = new List<grHist>();
+    public static List<grHist> Undos = new List<grHist>();
     public isHetOpgeslagen isHetOpgeslagen = new isHetOpgeslagen();
 
     public Schets()
@@ -40,7 +41,7 @@ public class Schets
     {
         Graphics gr = Graphics.FromImage(bitmap);
         gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
-        Schets.BMveranderingen.Clear();
+        BMveranderingen.Clear();
     }
     public void Roteer()
     {

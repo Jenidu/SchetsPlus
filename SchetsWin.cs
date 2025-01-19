@@ -168,20 +168,30 @@ public class SchetsWin : Form //in form zit dat kruisje
         paneel.Size = new Size(600, 24);
             
         Button clear = new Button(); paneel.Controls.Add(clear);
-        clear.Text = "Clear";  
-        clear.Location = new Point(  0, 0); 
-        clear.Click += schetscontrol.Schoon;        
+        clear.Text = "Clear";
+        clear.Location = new Point( 0, 0);
+        clear.Click += schetscontrol.Schoon;
             
         Button rotate = new Button(); paneel.Controls.Add(rotate);
-        rotate.Text = "Rotate"; 
-        rotate.Location = new Point( 80, 0); 
-        rotate.Click += schetscontrol.Roteer; 
+        rotate.Text = "Rotate";
+        rotate.Location = new Point( 80, 0);
+        rotate.Click += schetscontrol.Roteer;
            
         Label penkleur = new Label(); paneel.Controls.Add(penkleur);
         penkleur.Text = "Penkleur:"; 
         penkleur.Location = new Point(180, 3); 
-        penkleur.AutoSize = true;               
-            
+        penkleur.AutoSize = true;
+
+        Button undo = new Button(); paneel.Controls.Add(undo);
+        undo.Text = "Undo";
+        undo.Location = new Point(440, 0);
+        undo.Click += schetscontrol.Undo;
+
+        Button redo = new Button(); paneel.Controls.Add(redo);
+        redo.Text = "Redo";
+        redo.Location = new Point(520, 0);
+        redo.Click += schetscontrol.Redo;
+
         ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
         cbb.Location = new Point(240, 0); 
         cbb.DropDownStyle = ComboBoxStyle.DropDownList; 

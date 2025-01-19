@@ -48,7 +48,6 @@ public class SchetsControl : UserControl
     public void Schoon(object o, EventArgs ea)
     {
         schets.Schoon();
-        // Schets.BMveranderingen.Clear();
         this.Invalidate();
     }
     public void Roteer(object o, EventArgs ea)
@@ -56,6 +55,30 @@ public class SchetsControl : UserControl
         schets.VeranderAfmeting(new Size(this.ClientSize.Height, this.ClientSize.Width));
         schets.Roteer();
         this.Invalidate();
+    }
+
+    public void Undo(object o, EventArgs ea)
+    {
+        if (Schets.BMveranderingen.Count >= 1)  /* Er valt iets terug te zetten */
+        {
+            Graphics gr = Graphics.FromImage(Schets.bitmap);
+            gr.FillRectangle(Brushes.White, 0, 0, Schets.bitmap.Width, Schets.bitmap.Height);
+            Schets.Undos.Add(Schets.BMveranderingen[Schets.BMveranderingen.Count-1]);
+            Schets.BMveranderingen.Remove(Schets.BMveranderingen[Schets.BMveranderingen.Count-1]);  /* Verwijder item uit geschiedenis */
+            ElemBewerken.bouwBitmap(gr);  /* Herbouw de bitmap */
+            this.Invalidate();
+        }
+    }
+    public void Redo(object o, EventArgs ea)
+    {
+        if (Schets.Undos.Count >= 1)  /* Er valt iets terug te zetten */
+        {
+            Graphics gr = Graphics.FromImage(Schets.bitmap);
+            Schets.BMveranderingen.Add(Schets.Undos[Schets.Undos.Count-1]);
+            Schets.Undos.Remove(Schets.Undos[Schets.Undos.Count-1]);  /* Verwijder item uit geschiedenis */
+            ElemBewerken.bouwBitmap(gr);  /* Herbouw de bitmap */
+            this.Invalidate();
+        }
     }
     public void Exporteren_Png(object o, EventArgs ea)//kan dit effici�nter? misschien met switch?
     {
