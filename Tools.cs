@@ -88,10 +88,10 @@ public abstract class StartpuntTool : ISchetsTool
             p1 = p[0], p2 = p[1], brush = Kwast, Actie = "DrawRectangle"
         };
 
-        g.DrawRectangle(MaakPen(Kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
-
         if (add_hist)
             Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
+
+        g.DrawRectangle(MaakPen(Kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
     }
 
     public void VulRechthoek(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
@@ -101,23 +101,23 @@ public abstract class StartpuntTool : ISchetsTool
             p1 = p[0], p2 = p[1], brush = Kwast, Actie = "FillRectangle"
         };Console.WriteLine(p1);Console.WriteLine(p2);
 
-        g.FillRectangle(Kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
-
         if (add_hist)
             Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
+
+        g.FillRectangle(Kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
     }
 
     public void TekenLijn(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
     {
-        Point[] p = OrderPoints(p1, p2);
+        // Point[] p = OrderPoints(p1, p2);
         grHist gr_hist = new grHist {
-            p1 = p[0], p2 = p[1], brush = Kwast, Actie = "DrawLine"
+            p1 = p1, p2 = p2, brush = Kwast, Actie = "DrawLine"
         };
-
-        g.DrawLine(MaakPen(Kwast,3), p1, p2);
 
         if (add_hist)
             Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
+
+        g.DrawLine(MaakPen(Kwast,3), p1, p2);
     }
 
     public void TekenEllips(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
@@ -127,10 +127,10 @@ public abstract class StartpuntTool : ISchetsTool
             p1 = p[0], p2 = p[1], brush = Kwast, Actie = "DrawEllipse"
         };
 
-        g.DrawEllipse(MaakPen(Kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
-
         if (add_hist)
             Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
+
+        g.DrawEllipse(MaakPen(Kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
     }
 
     public void VulEllips(Graphics g, Point p1, Point p2, Brush Kwast, bool add_hist)
@@ -140,10 +140,10 @@ public abstract class StartpuntTool : ISchetsTool
             p1 = p[0], p2 = p[1], brush = Kwast, Actie = "FillEllipse"
         };
 
-        g.FillEllipse(Kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
-
         if (add_hist)
             Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
+
+        g.FillEllipse(Kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
     }
 }
 
@@ -191,7 +191,7 @@ public abstract class TweepuntTool : StartpuntTool
     {
     }
     public abstract void Bezig(Graphics g, Point p1, Point p2);
-        
+
     public virtual void Compleet(Graphics g, Point p1, Point p2)
     {   this.Bezig(g, p1, p2);
     }
@@ -224,6 +224,10 @@ public class LijnTool : TweepuntTool
     public override string ToString() { return "lijn"; }
 
     public override void Bezig(Graphics g, Point p1, Point p2){
+        TekenLijn(g, p1, p2, kwast, false);
+    }
+
+    public override void Compleet(Graphics g, Point p1, Point p2){
         TekenLijn(g, p1, p2, kwast, true);
     }
 }
@@ -238,7 +242,7 @@ public class PenTool : LijnTool
     }
 }
 
-public class GumTool : PenTool
+public class GumTool : TweepuntTool
 {
     public override string ToString() { return "gum"; }
 
@@ -260,16 +264,33 @@ public class GumTool : PenTool
     {   Console.WriteLine($"Count: {Schets.BMveranderingen.Count}");
         for (int i = Schets.BMveranderingen.Count - 1; i >= 0 ; i--)  /* Vind laatste Bitmap element dat overlapt met Point p */
         {
-Console.WriteLine($"{Schets.BMveranderingen[i].p1.X} <= {p.X} {Schets.BMveranderingen[i].p1.Y} <= {p.Y} {Schets.BMveranderingen[i].p2.X} >= {p.X} {Schets.BMveranderingen[i].p2.Y} >= {p.Y}");
-            if (Schets.BMveranderingen[i].p1.X <= p.X && Schets.BMveranderingen[i].p1.Y <= p.Y &&
-            Schets.BMveranderingen[i].p2.X >= p.X && Schets.BMveranderingen[i].p2.Y >= p.Y)
-                return i;
+// Console.WriteLine($"{Schets.BMveranderingen[i].p1.X} <= {p.X} {Schets.BMveranderingen[i].p1.Y} <= {p.Y} {Schets.BMveranderingen[i].p2.X} >= {p.X} {Schets.BMveranderingen[i].p2.Y} >= {p.Y}");
+            switch (Schets.BMveranderingen[i].Actie)
+            {
+                case "FillRectangle" or "DrawString":
+                    if (BoundingBox.FillRectangle(p, Schets.BMveranderingen[i])) return i;
+                    else break;
+                case "DrawRectangle":
+                    if (BoundingBox.DrawRectangle(p, Schets.BMveranderingen[i])) return i;
+                    else break;
+                case "DrawLine":
+                    if (BoundingBox.DrawLine(p, Schets.BMveranderingen[i])) return i;
+                    else break;
+                case "DrawEllipse":
+                    if (BoundingBox.DrawEllipse(p, Schets.BMveranderingen[i])) return i;
+                    else break;
+                case "FillEllipse":
+                    if (BoundingBox.FillEllipse(p, Schets.BMveranderingen[i])) return i;
+                    else break;
+                default:
+                    return i;
+            }
         }
         return -1;  /* De gegeven positie zit niet in de geschiedenis */
     }
 
     private void bouwBitmap(Graphics g)
-    {
+    {   Console.WriteLine($"New count: {Schets.BMveranderingen.Count}");
         for (int i = 0; i < Schets.BMveranderingen.Count; i++)
         {
             switch (Schets.BMveranderingen[i].Actie)
@@ -319,5 +340,68 @@ public class VolCirkelTool : CirkelTool
 
     public override void Compleet(Graphics g, Point p1, Point p2){
         VulEllips(g, p1, p2, kwast, true);
+    }
+}
+
+public static class BoundingBox
+{
+    private static readonly int mar = 10;  /* Bounding box margin */
+
+    public static bool FillRectangle(Point p, grHist gr_hist)
+    {
+        return gr_hist.p1.X <= p.X && gr_hist.p1.Y <= p.Y &&
+               gr_hist.p2.X >= p.X && gr_hist.p2.Y >= p.Y;
+    }
+
+    public static bool DrawRectangle(Point p, grHist gr_hist)
+    {
+        int minX = Math.Min(gr_hist.p1.X, gr_hist.p2.X);
+        int maxX = Math.Max(gr_hist.p1.X, gr_hist.p2.X);
+        int minY = Math.Min(gr_hist.p1.Y, gr_hist.p2.Y);
+        int maxY = Math.Max(gr_hist.p1.Y, gr_hist.p2.Y);
+
+        return (Math.Abs(p.X - minX) <= mar || Math.Abs(p.X - maxX) <= mar) && (p.Y >= minY && p.Y <= maxY) ||
+               (Math.Abs(p.Y - minY) <= mar || Math.Abs(p.Y - maxY) <= mar) && (p.X >= minX && p.X <= maxX);
+    }
+
+    public static bool DrawLine(Point p, grHist gr_hist)
+    {
+        // (y - y1) / (y2 - y1) == (x - x1) / (x2 - x1)
+        double dx = gr_hist.p2.X - gr_hist.p1.X;
+        double dy = gr_hist.p2.Y - gr_hist.p1.Y;
+
+        if (Math.Abs(dy * (p.X - gr_hist.p1.X) - dx * (p.Y - gr_hist.p1.Y)) / Math.Sqrt(dx * dx + dy * dy) > mar*2)  /* Check if the point is on the line */
+            return false;
+
+        return p.X >= Math.Min(gr_hist.p1.X, gr_hist.p2.X) && p.X <= Math.Max(gr_hist.p1.X, gr_hist.p2.X) &&  /* De lijn is niet de lengte van het scherm */
+               p.Y >= Math.Min(gr_hist.p1.Y, gr_hist.p2.Y) && p.Y <= Math.Max(gr_hist.p1.Y, gr_hist.p2.Y);
+    }
+
+    public static bool DrawEllipse(Point p, grHist gr_hist)
+    {
+        double mid_x = (gr_hist.p1.X + gr_hist.p2.X) / (double)2;
+        double mid_y = (gr_hist.p1.Y + gr_hist.p2.Y) / (double)2;
+        double radX = Math.Abs(gr_hist.p2.X - gr_hist.p1.X) / (double)2;
+        double radY = Math.Abs(gr_hist.p2.Y - gr_hist.p1.Y) / (double)2;
+
+        double normal_x = (p.X - mid_x) / radX;  /* Afstand van midden van 0 tot 1 */
+        double normal_y = (p.Y - mid_y) / radY;
+
+        double ellip = normal_x * normal_x + normal_y * normal_y;
+
+        return Math.Abs(ellip - 1) <= mar / Math.Sqrt(radX * radY);
+    }
+
+    public static bool FillEllipse(Point p, grHist gr_hist)
+    {
+        double mid_x = (gr_hist.p1.X + gr_hist.p2.X) / (double)2;
+        double mid_y = (gr_hist.p1.Y + gr_hist.p2.Y) / (double)2;
+        double radX = Math.Abs(gr_hist.p2.X - gr_hist.p1.X) / (double)2;
+        double radY = Math.Abs(gr_hist.p2.Y - gr_hist.p1.Y) / (double)2;
+
+        double normal_x = (p.X - mid_x) / radX;  /* Afstand van midden van 0 tot 1 */
+        double normal_y = (p.Y - mid_y) / radY;
+
+        return normal_x * normal_x + normal_y * normal_y <= 1;
     }
 }
