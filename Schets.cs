@@ -98,6 +98,7 @@ public class Schets
 
         if (openFileDialog.ShowDialog() == DialogResult.OK)
         {
+            Schoon();
 
             StreamReader reader = new StreamReader(openFileDialog.FileName);
             string regel;
@@ -130,8 +131,10 @@ public class Schets
                     p1 = new Point(x1, y1), p2 = new Point(x2, y2), brush = new SolidBrush(kleur), tekst = elements[5], Actie = elements[6]
                 };
 
-
+                
                 BMveranderingen.Add(new_element);
+                
+               
             }
             StringBuilder sb = new StringBuilder();
             foreach (grHist element in BMveranderingen)
@@ -142,7 +145,7 @@ public class Schets
             }
             string AlleElementen = sb.ToString();
             Console.WriteLine(AlleElementen);
-            Schoon();
+            
             Graphics gr = Graphics.FromImage(bitmap);
             ElemBewerken.bouwBitmap(gr);
 
