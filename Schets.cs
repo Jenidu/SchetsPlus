@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -97,9 +98,6 @@ public class Schets
 
         if (openFileDialog.ShowDialog() == DialogResult.OK)
         {
-            
-
-           
 
             StreamReader reader = new StreamReader(openFileDialog.FileName);
             string regel;
@@ -108,54 +106,48 @@ public class Schets
             {
                 string[] elements = regel.Split(',');
 
-                grHist new_element = new grHist();
-
-                
-                
                 int position = elements[0].IndexOf("=");
                 int x1 = int.Parse(elements[0].Substring(position + 1));
 
                 int lengte = elements[1].Length;
                 position = elements[1].IndexOf("=");
                 int y1 = int.Parse(elements[1].Substring(position + 1, lengte - (position + 2)));
-                new_element.p1 = new Point(x1, y1);
-
 
                 position = elements[2].IndexOf("=");
                 int x2 = int.Parse(elements[2].Substring(position + 1));
 
                 lengte = elements[3].Length;
                 position = elements[3].IndexOf("=");
-                int y2 = int.Parse(elements[1].Substring(position + 1, lengte - (position + 2)));
-
-                new_element.p2 = new Point(x2, y2);
+                int y2 = int.Parse(elements[3].Substring(position + 1, lengte - (position + 2)));
 
                 lengte = elements[4].Length;
                 position = elements[4].IndexOf("[");
                 string color = elements[4].Substring(position + 1, lengte - (position + 2));
                 Color kleur = Color.FromName(color);
-                new_element.brush = new SolidBrush(kleur);
-               
+                Console.WriteLine(color);
 
-                new_element.tekst = elements[5];
-                new_element.Actie = elements[6];
+                grHist new_element = new grHist {
+                    p1 = new Point(x1, y1), p2 = new Point(x2, y2), brush = new SolidBrush(kleur), tekst = elements[5], Actie = elements[6]
+                };
 
 
                 BMveranderingen.Add(new_element);
             }
+            StringBuilder sb = new StringBuilder();
+            foreach (grHist element in BMveranderingen)
+            {
+                sb.Append(element.ToString() + System.Environment.NewLine);
 
-            Graphics gr = Graphics.FromImage(bitmap);
+                //sb.Append(";");
+            }
+            string AlleElementen = sb.ToString();
+            Console.WriteLine(AlleElementen);
             Schoon();
+            Graphics gr = Graphics.FromImage(bitmap);
             ElemBewerken.bouwBitmap(gr);
 
-        }
-            
-            
-
-       
+        }       
     }
-
-
 
 }
 
