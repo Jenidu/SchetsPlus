@@ -15,7 +15,6 @@ public class Schets
     public Bitmap bitmap;
     public static List<grHist> BMveranderingen = new List<grHist>();
     public static List<grHist> Undos = new List<grHist>();   
-    public static List<grHist> BMnieuw = new List<grHist>();
     public isHetOpgeslagen isHetOpgeslagen = new isHetOpgeslagen();
 
     public Schets()
@@ -126,19 +125,14 @@ public class Schets
                 grHist new_element = new grHist {
                     p1 = new Point(x1, y1), p2 = new Point(x2, y2), brush = new SolidBrush(kleur), tekst = elements[5], Actie = elements[6]
                 };
-
                 
                 BMveranderingen.Add(new_element);
-                
-               
             }
 
             Graphics gr = Graphics.FromImage(bitmap);
             ElemBewerken.bouwBitmap(gr);
-
         }       
     }
-
 }
 
 public class grHist
@@ -158,6 +152,5 @@ public class grHist
         sb.Append(tekst + ",");
         sb.Append(Actie);
         return sb.ToString();
-
     }
 }
