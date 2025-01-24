@@ -145,11 +145,10 @@ public class GumTool : TweepuntTool
 
     public override void Bezig(Graphics g, Point p1, Point p2)
     {
-        Console.WriteLine(startpunt);
         int pos = VindGeschiedenis(startpunt);  /* Vind de plek in geschiedenis dat weggehaald moet worden */
 
         if (pos != -1)
-        {   Console.WriteLine($"Gevonden {pos}");
+        {
             g.FillRectangle(Brushes.White, Schets.BMveranderingen[pos].p1.X - 2, Schets.BMveranderingen[pos].p1.Y - 2,
                                            Schets.BMveranderingen[pos].p2.X, Schets.BMveranderingen[pos].p2.Y);  /* Clear bitmap */
             Schets.BMveranderingen.Remove(Schets.BMveranderingen[pos]);  /* Verwijder item uit geschiedenis */
@@ -158,10 +157,9 @@ public class GumTool : TweepuntTool
     }
 
     private int VindGeschiedenis(Point p)
-    {   Console.WriteLine($"Count: {Schets.BMveranderingen.Count}");
+    {
         for (int i = Schets.BMveranderingen.Count - 1; i >= 0 ; i--)  /* Vind laatste Bitmap element dat overlapt met Point p */
         {
-// Console.WriteLine($"{Schets.BMveranderingen[i].p1.X} <= {p.X} {Schets.BMveranderingen[i].p1.Y} <= {p.Y} {Schets.BMveranderingen[i].p2.X} >= {p.X} {Schets.BMveranderingen[i].p2.Y} >= {p.Y}");
             switch (Schets.BMveranderingen[i].Actie)
             {
                 case "FillRectangle" or "DrawString":
@@ -267,7 +265,7 @@ public static class Teken
         Point[] p = OrderPoints(p1, p2);
         grHist gr_hist = new grHist {
             p1 = p[0], p2 = p[1], brush = Kwast, Actie = "FillRectangle"
-        };Console.WriteLine(p1);Console.WriteLine(p2);
+        };
 
         if (add_hist)
             Schets.BMveranderingen.Add(gr_hist);  /* Voeg nieuwe graphics informatie toe aan geschiedenis */
@@ -318,7 +316,7 @@ public static class Teken
 public static class ElemBewerken
 {
     public static void bouwBitmap(Graphics g)
-    {   Console.WriteLine($"New count: {Schets.BMveranderingen.Count}");
+    {
         for (int i = 0; i < Schets.BMveranderingen.Count; i++)
         {
             switch (Schets.BMveranderingen[i].Actie)

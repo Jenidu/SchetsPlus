@@ -89,9 +89,6 @@ public class Schets
     }
     public void open_bestand()
     {
-
-
-
         OpenFileDialog openFileDialog = new OpenFileDialog();
         openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
         openFileDialog.Title = "Bestand openen";
@@ -125,7 +122,6 @@ public class Schets
                 position = elements[4].IndexOf("[");
                 string color = elements[4].Substring(position + 1, lengte - (position + 2));
                 Color kleur = Color.FromName(color);
-                Console.WriteLine(color);
 
                 grHist new_element = new grHist {
                     p1 = new Point(x1, y1), p2 = new Point(x2, y2), brush = new SolidBrush(kleur), tekst = elements[5], Actie = elements[6]
@@ -136,16 +132,7 @@ public class Schets
                 
                
             }
-            StringBuilder sb = new StringBuilder();
-            foreach (grHist element in BMveranderingen)
-            {
-                sb.Append(element.ToString() + System.Environment.NewLine);
 
-                //sb.Append(";");
-            }
-            string AlleElementen = sb.ToString();
-            Console.WriteLine(AlleElementen);
-            
             Graphics gr = Graphics.FromImage(bitmap);
             ElemBewerken.bouwBitmap(gr);
 
