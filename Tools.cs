@@ -370,7 +370,6 @@ public static class BoundingBox
 
     public static bool DrawLine(Point p, grHist gr_hist)
     {
-        // (y - y1) / (y2 - y1) == (x - x1) / (x2 - x1)
         double dx = gr_hist.p2.X - gr_hist.p1.X;
         double dy = gr_hist.p2.Y - gr_hist.p1.Y;
 
