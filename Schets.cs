@@ -63,13 +63,14 @@ public class Schets
             isHetOpgeslagen.opgeslagen = true;
         }
     }
+   
     public void Exporteren_schets()
     {
         StringBuilder sb = new StringBuilder();
         foreach (grHist element in BMveranderingen)
         {
-            sb.Append(element.ToString() + ";" + System.Environment.NewLine);
-            
+            sb.Append(element.ToString() + System.Environment.NewLine);
+
             //sb.Append(";");
         }
         string AlleElementen = sb.ToString();
@@ -82,81 +83,75 @@ public class Schets
             StreamWriter writer = new StreamWriter(sfd.FileName);
             writer.Write(AlleElementen);
             writer.Close();
-        }      
+        }
 
     }
     public void open_bestand()
     {
-             
+
 
 
         OpenFileDialog openFileDialog = new OpenFileDialog();
         openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-        openFileDialog.Title = "Bestand openen";        
+        openFileDialog.Title = "Bestand openen";
 
         if (openFileDialog.ShowDialog() == DialogResult.OK)
         {
-            Graphics gr = Graphics.FromImage(bitmap);
-            gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
-            BMveranderingen.Clear();
+            
 
-            Regex pointRegex = new Regex(@"\{X=(\d+),Y=(\d+)\}");
-            Regex colorRegex = new Regex(@"Color \[(.+?)\]");
+           
 
             StreamReader reader = new StreamReader(openFileDialog.FileName);
-
             string regel;
+
             while ((regel = reader.ReadLine()) != null)
             {
                 string[] elements = regel.Split(',');
 
-                grHist history = new grHist();
+                grHist new_element = new grHist();
 
-                if (pointRegex.IsMatch(elements[0]))
-                {
-                    Match match = pointRegex.Match(elements[0]);
-                    int x1 = int.Parse(match.Groups[1].Value);
-                    int y1 = int.Parse(match.Groups[2].Value);
-                    history.p1 = new Point(x1, y1);
-                    BMveranderingen.Add(history);
-                }
+                
+                
+                int position = elements[0].IndexOf("=");
+                int x1 = int.Parse(elements[0].Substring(position + 1));
 
-                if (pointRegex.IsMatch(elements[1]))
-                {
-                    Match match = pointRegex.Match(elements[1]);
-                    int x2 = int.Parse(match.Groups[1].Value);
-                    int y2 = int.Parse(match.Groups[2].Value);
-                    history.p2 = new Point(x2, y2);
-                }
-
-                // Parse color (if it exists)
-                if (colorRegex.IsMatch(elements[2]))
-                {
-                    Match match = colorRegex.Match(elements[2]);
-                    string colorName = match.Groups[1].Value;
-                    history.brush = new SolidBrush(Color.FromName(colorName));
-                }
+                int lengte = elements[1].Length;
+                position = elements[1].IndexOf("=");
+                int y1 = int.Parse(elements[1].Substring(position + 1, lengte - (position + 2)));
+                new_element.p1 = new Point(x1, y1);
 
 
-                history.tekst = elements[3];
+                int position = elements[2].IndexOf("=");
+                int x2 = int.Parse(elements[2].Substring(position + 1));
+
+                int lengte = elements[3].Length;
+                position = elements[3].IndexOf("=");
+                int y2 = int.Parse(elements[1].Substring(position + 1, lengte - (position + 2)));
+
+                new_element.p2 = new Point(x2, y2);
+
+                int lengte = elements[4].Length;
+                position = elements[4].IndexOf("[");
+                string color = elements[4].Substring(position + 1, lengte - (position + 2));
+                new_element.brush = new Brush(color);
+
+                new_element.tekst = elements[5];
+                new_element.Actie = elements[6];
 
 
-
-
-                history.Actie = elements[4];
-
-
-
-                BMveranderingen.Add(history);
+                BMveranderingen.Add(new_element);
             }
 
+            Graphics gr = Graphics.FromImage(bitmap);
+            Schoon();
             ElemBewerken.bouwBitmap(gr);
 
-
-
         }
-    }
+            
+            
 
+       
+    }
 
 
 
@@ -173,17 +168,16 @@ public class grHist
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.Append(p1.ToString() + ",");
-        sb.Append(p2.ToString() + ",");
-        sb.Append(((SolidBrush)brush).Color.ToString() + ",");        
-        sb.Append(tekst + ",");
+        sb.Append(p1.ToString() + ";");
+        sb.Append(p2.ToString() + ";");
+        sb.Append(((SolidBrush)brush).Color.ToString() + ";");        
+        sb.Append(tekst + ";");
         sb.Append(Actie);
         return sb.ToString();
 
     }
 
     
-   
-   
+      
 
 }
