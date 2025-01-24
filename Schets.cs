@@ -121,19 +121,21 @@ public class Schets
                 new_element.p1 = new Point(x1, y1);
 
 
-                int position = elements[2].IndexOf("=");
-                int x2 = int.Parse(elements[2].Substring(position + 1));
+                int position_1 = elements[2].IndexOf("=");
+                int x2 = int.Parse(elements[2].Substring(position_1 + 1));
 
-                int lengte = elements[3].Length;
-                position = elements[3].IndexOf("=");
-                int y2 = int.Parse(elements[1].Substring(position + 1, lengte - (position + 2)));
+                int lengte_1 = elements[3].Length;
+                int position_3 = elements[3].IndexOf("=");
+                int y2 = int.Parse(elements[1].Substring(position + 1, lengte_1 - (position_3 + 2)));
 
                 new_element.p2 = new Point(x2, y2);
 
-                int lengte = elements[4].Length;
-                position = elements[4].IndexOf("[");
-                string color = elements[4].Substring(position + 1, lengte - (position + 2));
-                new_element.brush = new Brush(color);
+                int lengte_2 = elements[4].Length;
+                int position_2 = elements[4].IndexOf("[");
+                string color = elements[4].Substring(position + 1, lengte_2 - (position_2 + 2));
+                Color kleur = Color.FromName(color);
+                new_element.brush = new SolidBrush(kleur);
+               
 
                 new_element.tekst = elements[5];
                 new_element.Actie = elements[6];
