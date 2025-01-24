@@ -165,16 +165,12 @@ public class grHist
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.Append(p1.ToString() + ";");
-        sb.Append(p2.ToString() + ";");
-        sb.Append(((SolidBrush)brush).Color.ToString() + ";");        
-        sb.Append(tekst + ";");
+        sb.Append(p1.ToString() + ",");
+        sb.Append(p2.ToString() + ",");
+        sb.Append(((SolidBrush)brush).Color.ToString() + ",");        
+        sb.Append(tekst + ",");
         sb.Append(Actie);
         return sb.ToString();
 
     }
-
-    
-      
-
 }
