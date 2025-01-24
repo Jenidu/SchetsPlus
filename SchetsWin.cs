@@ -103,6 +103,7 @@ public class SchetsWin : Form //in form zit dat kruisje
         ToolStripMenuItem menu = new ToolStripMenuItem("File");
         menu.MergeAction = MergeAction.MatchOnly;
         menu.DropDownItems.Add("Sluiten", null, this.afsluiten);
+        menu.DropDownItems.Add("Open", null, schetscontrol.open_bestand);
         menuStrip.Items.Add(menu);
     }
 
@@ -134,10 +135,11 @@ public class SchetsWin : Form //in form zit dat kruisje
 
     private void maakExporterenMenu()
     {
-        ToolStripMenuItem menu = new ToolStripMenuItem("Exporteren");        
+        ToolStripMenuItem menu = new ToolStripMenuItem("Opslaan");        
         menu.DropDownItems.Add("PNG", null, schetscontrol.Exporteren_Png);        
         menu.DropDownItems.Add("JPG", null, schetscontrol.Exporteren_Jpeg);        
         menu.DropDownItems.Add("BMP", null, schetscontrol.Exporteren_Bmp);
+        menu.DropDownItems.Add("Schets-formaat", null, schetscontrol.Exporteren_schets);
         menuStrip.Items.Add(menu);
     }
 

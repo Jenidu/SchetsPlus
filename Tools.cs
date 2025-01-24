@@ -153,7 +153,7 @@ public class GumTool : TweepuntTool
             g.FillRectangle(Brushes.White, Schets.BMveranderingen[pos].p1.X - 2, Schets.BMveranderingen[pos].p1.Y - 2,
                                            Schets.BMveranderingen[pos].p2.X, Schets.BMveranderingen[pos].p2.Y);  /* Clear bitmap */
             Schets.BMveranderingen.Remove(Schets.BMveranderingen[pos]);  /* Verwijder item uit geschiedenis */
-            ElemBewerken.bouwBitmap(g);  /* Herbouw de bitmap */
+            ElemBewerken.bouwBitmap(g);  /* Herbouw de bitmap */ 
         }
     }
 

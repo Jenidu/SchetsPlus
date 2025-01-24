@@ -80,7 +80,7 @@ public class SchetsControl : UserControl
             this.Invalidate();
         }
     }
-    public void Exporteren_Png(object o, EventArgs ea)//kan dit effici�nter? misschien met switch?
+    public void Exporteren_Png(object o, EventArgs ea)
     {
         schets.ExporterenmetFormaat(ImageFormat.Png);
     }
@@ -91,6 +91,16 @@ public class SchetsControl : UserControl
     public void Exporteren_Bmp(object o, EventArgs ea)
     {
         schets.ExporterenmetFormaat(ImageFormat.Bmp);
+    }
+    public void Exporteren_schets(object o, EventArgs ea)
+    {
+        schets.Exporteren_schets();
+    }
+    public void open_bestand(object o, EventArgs ea)
+    {
+        
+        schets.open_bestand();
+        this.Invalidate();
     }
     public void VeranderKleur(object obj, EventArgs ea)
     {
